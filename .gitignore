@@ -1,0 +1,70 @@
+# ==================== Python ====================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+.venv/
+*.egg-info/
+*.egg
+build/
+dist/
+
+# ==================== 环境变量与密钥 ====================
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+
+# ==================== 数据库与数据文件 ====================
+*.db
+*.sqlite3
+ecomarket.db
+mysql_data/
+opengauss_data/
+redis_data/
+
+# ==================== 测试与覆盖率 ====================
+.pytest_cache/
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+.tox/
+
+# ==================== 上传文件（用户生成内容） ====================
+uploads/*
+!uploads/.gitkeep
+
+# ==================== IDE / 编辑器 ====================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# ==================== 操作系统 ====================
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ==================== 前端 ====================
+node_modules/
+frontend/dist/
+frontend/.vite/
+*.tsbuildinfo
+vite.config.ts.timestamp-*
+
+# ==================== 日志与临时文件 ====================
+*.log
+logs/
+*.tmp
+*.bak
+
+# ==================== Alembic 缓存 ====================
+alembic/__pycache__/
+alembic/versions/__pycache__/
