@@ -23,7 +23,7 @@
 |------|------|
 | 后端 | FastAPI + SQLAlchemy 2.0 (异步) |
 | 前端 | Vue3 + TypeScript + Element Plus + ECharts |
-| 数据库 | MySQL 9.7 / openGauss / SQLite |
+| 数据库 | MySQL 9.7 / openGauss |
 | 缓存 | Redis 7 |
 | AI | Qwen3.7-Plus (AsyncOpenAI) |
 | 迁移 | Alembic |
