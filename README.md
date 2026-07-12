@@ -7,7 +7,7 @@
 ## 功能特性
 
 - **用户系统**：注册登录、JWT 认证、信誉分评价
-- **商品管理**：发布、搜索、分类筛选、收藏、卖家信息展示
+- **商品管理**：发布、搜索、分类筛选、收藏、卖家信息与信誉分展示
 - **交易系统**：交易码确认机制 + 行锁防止超卖 + 多人并发请求
 - **站内消息**：基于商品的买卖双方双向沟通，协商交易时间地点
 - **AI 智能**：Qwen3.7-Plus 自动生成商品定价与描述
@@ -48,7 +48,18 @@ python scripts/init_data.py
 uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-默认使用 SQLite，无需额外安装数据库。如需使用 MySQL/openGauss，修改 `.env` 中 `DB_STRATEGY=fallback`。
+数据库策略通过 `.env` 中 `DB_STRATEGY` 配置：
+
+| 策略 | 说明 | 适用场景 |
+|------|------|---------|
+| `sqlite` | 使用 SQLite（`.env.example` 默认值） | 零配置开箱即用，适合快速体验 |
+| `primary` | 仅使用 MySQL | 生产环境主库 |
+| `fallback` | MySQL 主库，失败自动降级到 openGauss | 高可用生产环境 |
+| `opengauss_only` | 仅使用 openGauss | 国产数据库演示 |
+
+- `.env.example` 默认 `DB_STRATEGY=sqlite`，方便克隆后无需额外安装数据库即可运行
+- 切换到 MySQL/openGauss 时，修改 `.env` 中 `DB_STRATEGY=fallback` 并填写对应的数据库连接信息
+- 使用 MySQL 时可运行 `alembic upgrade head` 建表并应用索引优化
 
 ### 前端
 

@@ -92,7 +92,7 @@ async def search_items(
     total = (await db.execute(count_query)).scalar() or 0
 
     query = (
-        select(Item, User.username)
+        select(Item, User.username, User.reputation_score)
         .outerjoin(User, Item.user_id == User.user_id)
         .where(and_(*conditions))
         .order_by(Item.created_at.desc())
@@ -118,9 +118,10 @@ async def search_items(
             "view_count": i.view_count,
             "seller_id": i.user_id,
             "seller_name": seller_name if seller_name else "匿名用户",
+            "seller_score": float(seller_score) if seller_score is not None else 5.0,
             "created_at": i.created_at.isoformat() if i.created_at else None,
         }
-        for i, seller_name in rows
+        for i, seller_name, seller_score in rows
     ]
 
     return serialized, total, round(elapsed, 2), db_type
@@ -146,14 +147,14 @@ async def get_explain_plan(db: AsyncSession, keyword: str) -> dict:
 async def get_item_detail(db: AsyncSession, item_id: int) -> Optional[dict]:
     """获取商品详情并增加浏览量（原子更新，减少事务开销）"""
     result = await db.execute(
-        select(Item, User.username)
+        select(Item, User.username, User.reputation_score)
         .outerjoin(User, Item.user_id == User.user_id)
         .where(Item.item_id == item_id)
     )
     row = result.first()
     if not row:
         return None
-    item, seller_name = row
+    item, seller_name, seller_score = row
 
     # 原子更新：UPDATE items SET view_count = view_count + 1 WHERE item_id = ?
     # 避免先读后写的竞态条件，减少行锁持有时间
@@ -178,6 +179,7 @@ async def get_item_detail(db: AsyncSession, item_id: int) -> Optional[dict]:
         "images": item.images.split(",") if item.images else [],
         "user_id": item.user_id,
         "seller_name": seller_name if seller_name else "匿名用户",
+        "seller_score": float(seller_score) if seller_score is not None else 5.0,
         "view_count": item.view_count,
         "created_at": item.created_at.isoformat() if item.created_at else None,
     }
@@ -197,7 +199,7 @@ async def get_home_items_cached(db: AsyncSession, limit: int = 20) -> dict:
     total = (await db.execute(count_query)).scalar() or 0
 
     query = (
-        select(Item, User.username)
+        select(Item, User.username, User.reputation_score)
         .outerjoin(User, Item.user_id == User.user_id)
         .where(Item.status == 0)
         .order_by(Item.created_at.desc())
@@ -219,9 +221,10 @@ async def get_home_items_cached(db: AsyncSession, limit: int = 20) -> dict:
             "view_count": i.view_count,
             "seller_id": i.user_id,
             "seller_name": seller_name if seller_name else "匿名用户",
+            "seller_score": float(seller_score) if seller_score is not None else 5.0,
             "created_at": i.created_at.isoformat() if i.created_at else None,
         }
-        for i, seller_name in rows
+        for i, seller_name, seller_score in rows
     ]
 
     result_data = {"items": serialized, "total": total}

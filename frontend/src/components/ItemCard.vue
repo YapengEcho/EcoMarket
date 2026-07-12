@@ -15,6 +15,7 @@
       <h3 class="card-title">{{ item.title }}</h3>
       <div class="card-meta">
         <span class="card-seller">卖家：{{ item.seller_name || '匿名' }}</span>
+        <span class="card-score">★ {{ formatScore(item.seller_score) }}</span>
       </div>
       <span class="card-price">¥{{ formatPrice(item.price) }}</span>
     </div>
@@ -31,6 +32,11 @@ const props = defineProps<{ item: Item }>()
 const router = useRouter()
 const imgError = ref(false)
 const imgUrl = computed(() => formatImage(props.item.images))
+
+function formatScore(v?: number): string {
+  const s = Number(v)
+  return isNaN(s) ? '5.0' : s.toFixed(1)
+}
 
 function onClick() {
   router.push(`/item/${props.item.item_id}`)
@@ -107,9 +113,17 @@ function onClick() {
 
 .card-meta {
   margin: 0 0 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 .card-seller {
   font-size: 12px;
   color: var(--text-muted);
+}
+.card-score {
+  font-size: 12px;
+  color: #f5a623;
+  font-weight: 600;
 }
 </style>

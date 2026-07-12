@@ -30,6 +30,7 @@ export interface Item {
   view_count?: number
   seller_id?: number
   seller_name?: string
+  seller_score?: number
   created_at?: string
 }
 

@@ -41,7 +41,10 @@
             </div>
             <div class="meta-item">
               <span class="meta-label">卖家</span>
-              <span class="meta-value">{{ item.seller_name || '匿名' }}</span>
+              <span class="meta-value">
+                {{ item.seller_name || '匿名' }}
+                <span class="seller-score">★ {{ formatScore(item.seller_score) }}</span>
+              </span>
             </div>
             <div class="meta-item">
               <span class="meta-label">发布</span>
@@ -93,6 +96,11 @@ const loading = ref(false)
 const isFav = ref(false)
 
 const mainImg = computed(() => formatImage(item.value?.images))
+
+function formatScore(v?: number): string {
+  const s = Number(v)
+  return isNaN(s) ? '5.0' : s.toFixed(1)
+}
 
 const statusClass = computed(() => {
   const s = item.value?.status
@@ -327,6 +335,13 @@ onMounted(() => {
 .meta-value {
   font-size: 14px;
   color: var(--text-secondary);
+}
+
+.seller-score {
+  margin-left: 6px;
+  font-size: 13px;
+  color: #f5a623;
+  font-weight: 600;
 }
 
 .divider {
