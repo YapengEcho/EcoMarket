@@ -28,9 +28,42 @@ const router = createRouter({
       path: '/profile', name: 'profile', component: () => import('@/views/Profile.vue'),
       meta: { requiresAuth: true },
     },
+    // 管理员后台
     {
-      path: '/admin', name: 'admin', component: () => import('@/views/AdminDashboard.vue'),
+      path: '/admin',
+      component: () => import('@/layouts/AdminLayout.vue'),
       meta: { requiresAuth: true, requiresAdmin: true },
+      redirect: '/admin/dashboard',
+      children: [
+        {
+          path: 'dashboard', name: 'admin-dashboard',
+          component: () => import('@/views/admin/Dashboard.vue'),
+        },
+        {
+          path: 'users', name: 'admin-users',
+          component: () => import('@/views/admin/UserList.vue'),
+        },
+        {
+          path: 'items', name: 'admin-items',
+          component: () => import('@/views/admin/ItemList.vue'),
+        },
+        {
+          path: 'categories', name: 'admin-categories',
+          component: () => import('@/views/admin/Categories.vue'),
+        },
+        {
+          path: 'transactions', name: 'admin-transactions',
+          component: () => import('@/views/admin/Transactions.vue'),
+        },
+        {
+          path: 'reviews', name: 'admin-reviews',
+          component: () => import('@/views/admin/Reviews.vue'),
+        },
+        {
+          path: 'messages', name: 'admin-messages',
+          component: () => import('@/views/admin/Messages.vue'),
+        },
+      ],
     },
   ],
 })

@@ -46,6 +46,9 @@ async def login(req: UserLogin, db: AsyncSession = Depends(get_db)):
     if not user or not verify_password(req.password, user.password_hash):
         return error("用户名或密码错误", 401)
 
+    if not user.is_active:
+        return error("账号已被禁用，请联系管理员", 403)
+
     token = create_access_token({"user_id": user.user_id, "username": user.username})
     return success({"token": token, "user_id": user.user_id, "username": user.username})
 

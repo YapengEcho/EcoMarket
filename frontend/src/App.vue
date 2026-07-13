@@ -9,7 +9,7 @@
           <router-link v-if="authStore.token" to="/my-items">我的商品</router-link>
           <router-link v-if="authStore.token" to="/my-orders">交易</router-link>
           <router-link v-if="authStore.token" to="/my-favorites">收藏</router-link>
-          <router-link v-if="authStore.isAdmin" to="/admin">看板</router-link>
+          <router-link v-if="authStore.isAdmin" to="/admin/dashboard">管理后台</router-link>
         </nav>
         <div class="nav-right">
           <template v-if="authStore.token">

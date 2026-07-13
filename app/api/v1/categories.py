@@ -38,3 +38,35 @@ async def create_category(
     await db.commit()
     await db.refresh(category)
     return success({"category_id": category.category_id}, "分类创建成功")
+
+
+@router.put("/{category_id}")
+async def update_category(
+    category_id: int,
+    name: str = None,
+    db: AsyncSession = Depends(get_db),
+):
+    """更新分类"""
+    result = await db.execute(select(Category).where(Category.category_id == category_id))
+    cat = result.scalar_one_or_none()
+    if not cat:
+        return error("分类不存在", 404)
+    if name is not None:
+        cat.name = name
+    await db.commit()
+    return success({"category_id": category_id}, "更新成功")
+
+
+@router.delete("/{category_id}")
+async def delete_category(
+    category_id: int,
+    db: AsyncSession = Depends(get_db),
+):
+    """删除分类"""
+    result = await db.execute(select(Category).where(Category.category_id == category_id))
+    cat = result.scalar_one_or_none()
+    if not cat:
+        return error("分类不存在", 404)
+    await db.delete(cat)
+    await db.commit()
+    return success({"category_id": category_id}, "已删除")

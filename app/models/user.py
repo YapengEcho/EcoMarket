@@ -16,6 +16,7 @@ class User(Base):
     school = Column(String(100), nullable=True)
     reputation_score = Column(DECIMAL(3, 2), default=5.00)
     is_admin = Column(Boolean, default=False)
+    is_active = Column(Boolean, default=True)
     created_at = Column(DateTime, server_default=func.now())
     updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now())
 
